@@ -78,8 +78,17 @@ function Item(props) {
             <strong>${props.price}</strong>
           </Tag>
         ) : null}
-        <Tag color={getStoreTagColor(props.groceryStoreId)}>
-          {props.groceryStoreName.replace(/\s+.*$/, "")}
+        <Tag>
+          <a
+            href={props.groceryProductUrl}
+            target="_blank"
+            style={{
+              textDecoration: "none",
+              color: getStoreTagColor(props.groceryStoreId),
+            }}
+          >
+            {props.groceryStoreName.replace(/\s+.*$/, "")}
+          </a>
         </Tag>
         {unitPrice && <Tag>{unitPrice}</Tag>}
       </div>
