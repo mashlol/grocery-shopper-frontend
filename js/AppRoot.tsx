@@ -117,36 +117,11 @@ export default function AppRoot() {
     }, {});
   }, [data]);
 
-  if (data == null) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div>
-      <input value={query} onChange={(e) => setQuery(e.target.value)} />
-      <button
-        onClick={() => {
-          setData(null);
-          fetch(
-            "https://www.grocery-shopper.shop/api/groceries?search=" +
-              encodeURIComponent(query) +
-              "&groceryStores=T%26T%20(Burnaby),Walmart%20(Burnaby),Superstore%20(Burnaby)&onSale=false"
-          )
-            .then((res) => res.json())
-            .then((data) => setData(data))
-            .catch((error) => console.error(error));
-        }}
-      >
-        Search
-      </button>
-      <div
-        style={{
-          display: "flex",
-          gap: 120,
-          padding: 40,
-          justifyContent: "center",
-        }}
-      >
+  const content =
+    data == null ? (
+      <div>Loading...</div>
+    ) : (
+      <>
         {groupedData[2] && (
           <GroceryStoreItems storeName={"Walmart"} items={groupedData[2]} />
         )}
@@ -156,6 +131,75 @@ export default function AppRoot() {
         {groupedData[4] && (
           <GroceryStoreItems storeName={"T&T"} items={groupedData[4]} />
         )}
+      </>
+    );
+
+  return (
+    <div>
+      <div
+        style={{
+          background: "#fff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: 60,
+          gap: 120,
+        }}
+      >
+        <h1>GROCERY SHOPPER</h1>
+        <form
+          onSubmit={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            setData(null);
+            fetch(
+              "https://www.grocery-shopper.shop/api/groceries?search=" +
+                encodeURIComponent(query) +
+                "&groceryStores=T%26T%20(Burnaby),Walmart%20(Burnaby),Superstore%20(Burnaby)&onSale=false"
+            )
+              .then((res) => res.json())
+              .then((data) => setData(data))
+              .catch((error) => console.error(error));
+          }}
+        >
+          <div style={{ position: "relative" }}>
+            <div
+              style={{
+                position: "absolute",
+                display: "flex",
+                top: 0,
+                bottom: 0,
+                left: 8,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              🔍
+            </div>
+            <input
+              style={{
+                padding: "8px 40px",
+                border: "none",
+                borderRadius: 32,
+                background: "#f4f5fb",
+              }}
+              placeholder="Search..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <button style={{ display: "none" }}>Search</button>
+        </form>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 120,
+          padding: 40,
+          justifyContent: "center",
+        }}
+      >
+        {content}
       </div>
     </div>
   );
