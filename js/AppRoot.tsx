@@ -90,7 +90,7 @@ function Item(props) {
 function GroceryStoreItems(props) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
-      <h1>{props.storeName}</h1>
+      <h2>{props.storeName}</h2>
       {props.items.map((item) => (
         <Item {...item} />
       ))}
