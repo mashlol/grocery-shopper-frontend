@@ -107,9 +107,55 @@ function GroceryStoreItems(props) {
   );
 }
 
+function Checkbox(props) {
+  const style: any = {
+    width: "16px",
+    height: "16px",
+    borderRadius: "4px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white",
+    boxSizing: "border-box",
+    cursor: "pointer",
+    userSelect: "none",
+  };
+
+  if (props.checked) {
+    style.background = "#0984e3";
+  } else {
+    style.border = "1px solid #ccc";
+  }
+
+  return (
+    <div onClick={props.onChecked} style={style}>
+      {props.checked && "✓"}
+    </div>
+  );
+}
+
 export default function AppRoot() {
   const [data, setData] = React.useState<any>([]);
+  const [queryText, setQueryText] = React.useState("");
   const [query, setQuery] = React.useState("");
+  const [saleOnly, setSaleOnly] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!query) {
+      return;
+    }
+
+    setData(null);
+    fetch(
+      "https://www.grocery-shopper.shop/api/groceries?search=" +
+        encodeURIComponent(query) +
+        "&groceryStores=T%26T%20(Burnaby),Walmart%20(Burnaby),Superstore%20(Burnaby)&onSale=" +
+        (saleOnly ? "true" : "false")
+    )
+      .then((res) => res.json())
+      .then((data) => setData(data))
+      .catch((error) => console.error(error));
+  }, [query, saleOnly]);
 
   const groupedData = React.useMemo(() => {
     if (data == null) {
@@ -169,44 +215,52 @@ export default function AppRoot() {
             onSubmit={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              setData(null);
-              fetch(
-                "https://www.grocery-shopper.shop/api/groceries?search=" +
-                  encodeURIComponent(query) +
-                  "&groceryStores=T%26T%20(Burnaby),Walmart%20(Burnaby),Superstore%20(Burnaby)&onSale=false"
-              )
-                .then((res) => res.json())
-                .then((data) => setData(data))
-                .catch((error) => console.error(error));
+              setQuery(queryText);
             }}
           >
-            <div style={{ position: "relative" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
               <div
                 style={{
-                  position: "absolute",
+                  fontSize: 12,
                   display: "flex",
-                  top: 0,
-                  bottom: 0,
-                  left: 8,
                   alignItems: "center",
-                  justifyContent: "center",
+                  gap: 8,
                 }}
               >
-                🔍
+                On Sale Only{" "}
+                <Checkbox
+                  checked={saleOnly}
+                  onChecked={() => setSaleOnly((old) => !old)}
+                />
               </div>
-              <input
-                style={{
-                  padding: "8px 40px",
-                  border: "none",
-                  borderRadius: 32,
-                  background: "#f4f5fb",
-                }}
-                placeholder="Search..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
+              <div style={{ position: "relative" }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    display: "flex",
+                    top: 0,
+                    bottom: 0,
+                    left: 8,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  🔍
+                </div>
+                <input
+                  style={{
+                    padding: "8px 40px",
+                    border: "none",
+                    borderRadius: 32,
+                    background: "#f4f5fb",
+                  }}
+                  placeholder="Search..."
+                  value={queryText}
+                  onChange={(e) => setQueryText(e.target.value)}
+                />
+              </div>
+              <button style={{ display: "none" }}>Search</button>
             </div>
-            <button style={{ display: "none" }}>Search</button>
           </form>
         </div>
       </div>
