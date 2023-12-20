@@ -146,50 +146,60 @@ export default function AppRoot() {
           gap: 120,
         }}
       >
-        <h1>GROCERY SHOPPER</h1>
-        <form
-          onSubmit={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            setData(null);
-            fetch(
-              "https://www.grocery-shopper.shop/api/groceries?search=" +
-                encodeURIComponent(query) +
-                "&groceryStores=T%26T%20(Burnaby),Walmart%20(Burnaby),Superstore%20(Burnaby)&onSale=false"
-            )
-              .then((res) => res.json())
-              .then((data) => setData(data))
-              .catch((error) => console.error(error));
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "min(100vw, 1140px)",
+            padding: "0 20px",
           }}
         >
-          <div style={{ position: "relative" }}>
-            <div
-              style={{
-                position: "absolute",
-                display: "flex",
-                top: 0,
-                bottom: 0,
-                left: 8,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              🔍
+          <h1>GROCERY SHOPPER</h1>
+          <form
+            onSubmit={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              setData(null);
+              fetch(
+                "https://www.grocery-shopper.shop/api/groceries?search=" +
+                  encodeURIComponent(query) +
+                  "&groceryStores=T%26T%20(Burnaby),Walmart%20(Burnaby),Superstore%20(Burnaby)&onSale=false"
+              )
+                .then((res) => res.json())
+                .then((data) => setData(data))
+                .catch((error) => console.error(error));
+            }}
+          >
+            <div style={{ position: "relative" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  display: "flex",
+                  top: 0,
+                  bottom: 0,
+                  left: 8,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                🔍
+              </div>
+              <input
+                style={{
+                  padding: "8px 40px",
+                  border: "none",
+                  borderRadius: 32,
+                  background: "#f4f5fb",
+                }}
+                placeholder="Search..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
             </div>
-            <input
-              style={{
-                padding: "8px 40px",
-                border: "none",
-                borderRadius: 32,
-                background: "#f4f5fb",
-              }}
-              placeholder="Search..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-          <button style={{ display: "none" }}>Search</button>
-        </form>
+            <button style={{ display: "none" }}>Search</button>
+          </form>
+        </div>
       </div>
       <div
         style={{
@@ -197,6 +207,7 @@ export default function AppRoot() {
           gap: 120,
           padding: 40,
           justifyContent: "center",
+          flexWrap: "wrap",
         }}
       >
         {content}
