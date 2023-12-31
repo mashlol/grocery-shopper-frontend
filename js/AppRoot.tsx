@@ -15,7 +15,7 @@ export default function AppRoot() {
 
     setData(null);
     fetch(
-      "https://www.grocery-shopper.shop/api/groceries?search=" +
+      "https://groceries-rngyxzdt3a-uc.a.run.app/?search=" +
         encodeURIComponent(query) +
         "&groceryStores=T%26T%20(Burnaby),Walmart%20(Burnaby),Superstore%20(Burnaby)&onSale=" +
         (saleOnly ? "true" : "false")

@@ -1,7 +1,7 @@
 const { onRequest } = require("firebase-functions/v2/https");
 const axios = require("axios");
 
-exports.groceries = onRequest(async (request, response) => {
+exports.groceries = onRequest({ cors: true }, async (request, response) => {
   const apiResponse = await axios.get(
     "https://www.grocery-shopper.shop/api/groceries?search=" +
       request.query.search +
